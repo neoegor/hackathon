@@ -1,6 +1,4 @@
-// Service worker: the only part of the extension that talks to the backend.
-// The content script sends it a "lookup" message; it POSTs JSON to the API
-// and returns the (validated) JSON back. See API.md for the contract.
+
 
 import { CONFIG } from "./config.js";
 
@@ -9,7 +7,7 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   lookup(msg)
     .then(sendResponse)
     .catch(() => sendResponse({ ok: false, reason: "network" }));
-  return true; // keep the channel open for the async response
+  return true; 
 });
 
 async function lookup({ mode, text }) {
@@ -45,13 +43,13 @@ async function lookup({ mode, text }) {
 
     return { ok: true, explanation: data.result.trim(), source: "Gemma 3" };
   } catch {
-    return { ok: false, reason: "network" }; // offline, timeout, bad JSON, etc.
+    return { ok: false, reason: "network" }; 
   } finally {
     clearTimeout(timer);
   }
 }
 
-// Fake responses for building the UI before the backend is ready.
+
 async function mockLookup(mode, text) {
   await new Promise((r) => setTimeout(r, 400));
   if (mode === "define") {
